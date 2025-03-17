@@ -1,19 +1,20 @@
 const express = require("express");
-const { calculationMiddleware, responseLogger } = require("./middleware");
+const userRoutes = require("./routes/users");  // ✅ Import users route
 
 const app = express();
 const PORT = 3000;
 
-// Use Middleware
-app.use(express.json()); 
-app.use(responseLogger); // Logs responses
+app.use(express.json());  // ✅ Middleware to parse JSON
 
-// Route using calculation middleware
-app.get("/calculate", calculationMiddleware, (req, res) => {
-    res.json({ message: "Calculation Complete!", result: req.calculationResult });
+// ✅ Register Routes
+app.use("/api/users", userRoutes);
+
+// Default Route
+app.get("/", (req, res) => {
+    res.send("Welcome to my API! E-commerce backend 🚀");
 });
 
-// Start the server
+// Start the Server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
