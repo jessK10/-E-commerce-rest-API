@@ -1,24 +1,35 @@
 const express = require("express");
+const { hashPassword } = require("../middleware/passwordEncrypt");
+const { signUp, login } = require("../controllers/userControllers");
+
 const router = express.Router();
 
-// ✅ POST request - Create a User
-router.post("/", (req, res) => {
-    // Destructure `firstName`, `email`, `password` from req.body
-    const { firstName, email, password } = req.body;
+// Test Route
+router.get("/", (req, res) => {
+    res.send("ok ok");
+});
 
-    // Validate if all fields are provided
-    if (!firstName || !email || !password) {
-        return res.status(400).json({ error: "First Name, Email, and Password are required!" });
+// User Signup Route
+router.post("/signup", signUp);
+
+// User Login Route
+router.post("/login", login);
+
+// Fixed: Test Route With Middleware
+router.post("/test", hashPassword, (req, res) => {
+    const { firstName, email } = req.body;
+
+    if (!firstName || !email) {
+        return res.status(400).json({ error: "First Name and Email are required!" });
     }
 
-    // ✅ Send JSON response back to the client
     res.status(201).json({
         message: "User Created Successfully!",
         user: {
             firstName,
             email,
-            password,
-            _id: "randomId123" // Simulating a generated user ID
+            hashedPassword: req.hashedPassword,
+            _id: "randomId567"
         }
     });
 });

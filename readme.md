@@ -21,3 +21,6 @@ Components:
         Payment Gateway (Stripe, PayPal)
         Email Notifications (SendGrid, Nodemailer)
         Cloud Storage (AWS S3, Cloudinary)
+
+        Deployed on Render:https://e-commerce-rest-api-a31l.onrender.com
+        
