@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const saltRounds = 10; // Number of salt rounds for hashing
 
 exports.hashPassword = (req, res, next) => {
