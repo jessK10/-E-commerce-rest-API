@@ -5,7 +5,7 @@ const connectDB = require("./utils/db"); // Import MongoDB connection
 const userRoutes = require("./routes/users"); // Import users route
 const productRoutes = require("./routes/products"); // Import products route
 
-const app = express(); // ✅ Moved BEFORE using app.use
+const app = express(); //  Moved BEFORE using app.use
 
 const PORT = process.env.PORT || 3000; // Use env variable
 
