@@ -1,0 +1,30 @@
+const jwt = require('jsonwebtoken');
+const User = require('../models/userModel');
+
+module.exports = async (req, res, next) => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token) {
+            return res.status(401).json({ message: 'No token provided' });
+        }
+
+        const decoded = jwt.verify(token, process.env.SECRET_TOKEN_KEY);
+
+        // Fetch user without password
+        const user = await User.findById(decoded.userId).select("-password");
+
+        if (!user) {
+            return res.status(401).json({ message: 'User no longer exists' });
+        }
+
+        req.user = user;
+        next();
+    } catch (error) {
+        let message = 'Invalid token';
+        if (error.name === 'TokenExpiredError') message = 'Token expired';
+        if (error.name === 'JsonWebTokenError') message = 'Malformed token';
+
+        res.status(401).json({ message });
+    }
+};

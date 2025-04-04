@@ -2,6 +2,13 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/productModel"); //  Import the model
+const authMiddleware = require("../middleware/authMiddleware");
+
+
+// Example: Protect this route
+router.get("/secure", authMiddleware, (req, res) => {
+    res.send(`Hello user ${req.userId}, this is a protected route!`);
+});
 
 // Test route
 router.get("/", (req, res) => {
