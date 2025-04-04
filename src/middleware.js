@@ -1,20 +1,34 @@
-// middleware.js
+const multer = require("multer");
+const path = require("path");
 
-// Middleware to calculate a value and pass it to the next function
-const calculationMiddleware = (req, res, next) => {
-    const result = 4 * 7; // Perform the calculation
-    req.calculationResult = result; // Store in request object
-    next(); // Move to the next function
-};
+// Configure storage options for Multer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Ensure the 'uploads' directory exists or create it manually
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    // Use current timestamp + original file name to avoid conflicts
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 
-// Middleware to log the final response
-const responseLogger = (req, res, next) => {
-    const originalSend = res.send;
-    res.send = function (body) {
-        console.log(`Response to User:`, body);
-        originalSend.call(this, body);
-    };
-    next();
-};
+// Multer upload middleware configuration
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+  fileFilter: (req, file, cb) => {
+    // Accept image files only
+    const filetypes = /jpeg|jpg|png|gif/;
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = filetypes.test(file.mimetype);
+    
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb("Error: Invalid file type!");
+    }
+  },
+});
 
-module.exports = { calculationMiddleware, responseLogger };
+module.exports = upload;
