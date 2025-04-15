@@ -13,11 +13,8 @@ const userSignUp = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash the password using bcrypt
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create a new user instance
-    const newUser = new User({ username, email, password: hashedPassword });
+    // ✅ Do NOT hash manually — let the pre-save middleware handle it
+    const newUser = new User({ username, email, password });
     await newUser.save();
 
     res.status(201).json({ message: "User registered successfully" });
@@ -72,24 +69,23 @@ const userLogin = async (req, res) => {
 // Update User Profile (with Profile Picture)
 const updateUserProfile = async (req, res) => {
   try {
-    // Access userId from req.user (set by auth middleware)
-    const userId = req.user._id;  // Make sure it's req.user, not req.userId
+    const userId = req.user._id;
 
     const updateData = {};
 
     // If a profile picture file is uploaded, add the processed path to updateData
     if (req.file && req.file.processedPath) {
-      updateData.profilePic = req.file.processedPath;  // Save the path to the file
+      const fileUrl = `${req.protocol}://${req.get("host")}/${req.file.processedPath}`;
+      updateData.profilePic = fileUrl;
     }
 
-    // Optionally update username and email if provided in the request body
+    // Optionally update username and email
     const { username, email } = req.body;
     if (username) updateData.username = username;
     if (email) updateData.email = email;
 
-    // Update user in the database
     const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
-      new: true,  // Return the updated document
+      new: true,
     });
 
     if (!updatedUser) {
