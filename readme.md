@@ -55,8 +55,7 @@ Authorization: Bearer <your_token_here>
 ⚙️ Getting Started
 
 # 1. Clone the repository
-git clone https://github.com/your-username/e-commerce-rest-api.git
-cd e-commerce-rest-api
+https://github.com/jessK10/-E-commerce-rest-API
 
 # 2. Install dependencies
 npm install
