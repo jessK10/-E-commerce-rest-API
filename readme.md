@@ -61,10 +61,6 @@ cd e-commerce-rest-api
 # 2. Install dependencies
 npm install
 
-# 3. Create a .env file with the following:
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/ecommerce
-JWT_SECRET=yourSecretKey
 
 # 4. Run the server in development mode
 npm run dev
@@ -145,5 +141,6 @@ Token-protected routes working
 
 💻 Author
 
-🔗 GitHub:
+🔗 GitHub:https://github.com/jessK10/-E-commerce-rest-API/tree/final
+
 

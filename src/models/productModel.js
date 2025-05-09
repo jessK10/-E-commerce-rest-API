@@ -7,6 +7,9 @@ const productSchema = new mongoose.Schema(
     price: { type: Number, required: true },
     category: { type: String, default: 'apple' },
     stock: { type: Number, default: 1 },
+
+    // ✅ Add this line
+    image: { type: String }, 
   },
   { timestamps: true }
 );
